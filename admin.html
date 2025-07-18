@@ -5,17 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Painel Administrativo - Silva do Corte</title>
     <style>
-        /* INÍCIO DO CÓDIGO CSS */
-        body {
+        /* ESTILOS GERAIS */
+        :root {
+            --primary: #facc15;
+            --primary-dark: #eab308;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --text: #ffffff;
+            --text-light: #cbd5e1;
+            --text-lighter: #94a3b8;
+        }
+        
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+        
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1e293b;
-            color: #fff;
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.5;
         }
 
+        /* MODAL DE LOGIN */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        .login-box {
+            background-color: var(--dark-light);
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            border: 2px solid var(--primary);
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .login-box h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .login-box input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            background-color: var(--text);
+            color: var(--dark);
+        }
+        
+        .login-box button {
+            background-color: var(--primary);
+            color: var(--dark);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        
+        .login-box button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .login-error {
+            color: #ef4444;
+            margin-top: 1rem;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        /* HEADER */
         header {
-            background-color: #0f172a;
-            padding: 1rem 2rem;
+            background-color: var(--dark-light);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -23,56 +114,67 @@
 
         header h1 {
             font-size: 1.2rem;
-            color: #facc15;
+            color: var(--primary);
         }
 
         .top-right {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
         }
 
         .top-right button {
             background-color: transparent;
-            border: 1px solid #facc15;
-            color: #facc15;
+            border: 1px solid var(--primary);
+            color: var(--primary);
             padding: 0.3rem 0.8rem;
             border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
+            font-size: 0.8rem;
         }
 
         .top-right .sair {
-            border-color: #fff;
-            color: #fff;
+            border-color: var(--text);
+            color: var(--text);
         }
 
+        /* NAVEGAÇÃO */
         nav {
-            background-color: #1e293b;
-            padding: 0.5rem 2rem;
+            background-color: var(--dark-light);
+            padding: 0.5rem;
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+            gap: 0.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            border-bottom: 1px solid #334155;
+        }
+
+        nav::-webkit-scrollbar {
+            display: none;
         }
 
         nav button {
             background: none;
             border: none;
-            color: #cbd5e1;
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         nav button.active {
-            background-color: #facc15;
+            background-color: var(--primary);
             color: black;
             border-radius: 5px;
             font-weight: bold;
         }
 
+        /* CONTEÚDO PRINCIPAL */
         .main {
-            padding: 2rem;
+            padding: 1rem;
         }
 
         .tab-content {
@@ -83,25 +185,30 @@
             display: block;
         }
 
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* CARDS DE RESUMO */
         .cards {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
         }
 
         .card {
-            background-color: #0f172a;
+            background-color: var(--dark);
             border: 1px solid #334155;
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 8px;
-            min-width: 140px;
             text-align: center;
         }
 
         .card span {
-            font-size: 2rem;
+            font-size: 1.5rem;
             display: block;
             margin-bottom: 0.3rem;
             font-weight: bold;
@@ -110,271 +217,360 @@
         .card:nth-child(1) span { color: #22c55e; }
         .card:nth-child(2) span { color: #3b82f6; }
         .card:nth-child(3) span { color: #a855f7; }
-        .card:nth-child(4) span { color: #facc15; }
+        .card:nth-child(4) span { color: var(--primary); }
 
         .card p {
             margin: 0;
-            color: #cbd5e1;
+            color: var(--text-light);
+            font-size: 0.8rem;
         }
 
+        /* MENSAGEM SEM DADOS */
         .no-data {
-            margin-top: 2rem;
+            margin: 2rem 0;
             text-align: center;
-            color: #94a3b8;
+            color: var(--text-lighter);
+            padding: 1rem;
+            background-color: var(--dark);
+            border-radius: 8px;
+            border: 1px dashed #334155;
         }
 
+        .no-data .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FORMULÁRIOS */
         .form-section {
-            max-width: 600px;
-            margin: 2rem auto;
+            max-width: 100%;
+            margin: 1.5rem 0;
         }
 
-        .form-section input, .form-section select, .form-section textarea, .form-section button {
+        .form-section label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .form-section input,
+        .form-section select,
+        .form-section textarea {
             width: 100%;
-            padding: 0.7rem;
+            padding: 0.8rem;
             margin-bottom: 1rem;
             border-radius: 5px;
             border: none;
             font-size: 1rem;
-            color: #0f172a; /* Cor do texto dentro dos inputs */
-            background-color: #fff; /* Fundo branco para inputs */
+            background-color: var(--text);
+            color: var(--dark);
+        }
+
+        .form-section textarea {
+            min-height: 100px;
+            resize: vertical;
         }
 
         .form-section button {
-            background-color: #facc15;
+            background-color: var(--primary);
             color: black;
             font-weight: bold;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            transition: background-color 0.3s;
         }
-        .form-section button.delete-btn, .form-section button.edit-btn { 
-            background-color: #ef4444; /* Delete */
-            color: white;
-            width: auto; 
-            padding: 0.2rem 0.5rem;
-            margin-left: 10px;
-            font-size: 0.8rem;
+
+        .form-section button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* BOTÕES DE AÇÃO */
+        .delete-btn, .edit-btn {
+            padding: 0.3rem 0.6rem;
             border-radius: 3px;
+            font-size: 0.8rem;
             cursor: pointer;
-            display: inline-block;
-            vertical-align: middle; /* Alinha com o texto */
-        }
-        .form-section button.edit-btn {
-            background-color: #3b82f6; /* Azul para editar */
+            border: none;
+            font-weight: bold;
         }
 
-        .form-section label {
-            text-align: left;
-            display: block;
-            margin-bottom: 0.3rem;
-            color: #e2e8f0;
+        .delete-btn {
+            background-color: #ef4444;
+            color: white;
         }
 
-        /* Estilos para a nova seção de horários */
+        .edit-btn {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        /* HORÁRIOS */
+        .horarios-container {
+            margin-top: 1.5rem;
+        }
+
         .horarios-container h3 {
-            margin-top: 2rem;
             margin-bottom: 1rem;
-            color: #facc15;
+            color: var(--primary);
+            font-size: 1.1rem;
         }
 
         .horarios-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* 5 colunas fluidas */
-            gap: 10px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .horario-btn {
             background-color: #334155;
-            color: #e2e8f0;
-            padding: 12px 0;
+            color: var(--text-light);
+            padding: 0.8rem 0;
             border-radius: 5px;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
+            font-size: 0.9rem;
             text-align: center;
-            transition: background-color 0.2s, color 0.2s;
-            position: relative;
+            transition: all 0.2s;
         }
 
         .horario-btn.selected {
-            background-color: #facc15;
-            color: #0f172a;
+            background-color: var(--primary);
+            color: var(--dark);
         }
 
         .horario-btn.occupied {
-            background-color: #ef4444; /* Vermelho para horários ocupados/bloqueados */
+            background-color: #ef4444;
             color: white;
             text-decoration: line-through;
             cursor: not-allowed;
         }
 
         .salvar-horarios-btn {
-            background-color: #facc15;
+            background-color: var(--primary);
             color: black;
             font-weight: bold;
-            padding: 0.8rem 1.5rem;
+            padding: 0.8rem;
             border-radius: 5px;
             border: none;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: auto;
-            margin: 0 auto;
+            width: 100%;
+            margin-top: 1rem;
         }
 
-        /* Estilos para lista de serviços/produtos */
+        /* LISTAS DE ITENS */
         .lista-itens {
             list-style: none;
             padding: 0;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
+
         .lista-itens li {
-            background-color: #0f172a;
+            background-color: var(--dark);
             border: 1px solid #334155;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             padding: 1rem;
             display: flex;
-            align-items: center;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 0.8rem;
         }
+
         .lista-itens li img {
-            width: 80px;
-            height: 80px;
+            width: 100%;
+            height: auto;
+            max-height: 150px;
             object-fit: cover;
             border-radius: 4px;
         }
-        .lista-itens li div {
-            flex-grow: 1;
-        }
+
         .lista-itens li h4 {
-            margin: 0 0 0.5rem 0;
-            color: #facc15;
-            font-size: 1.1rem;
+            margin: 0;
+            color: var(--primary);
+            font-size: 1rem;
         }
+
         .lista-itens li p {
             margin: 0;
             font-size: 0.9rem;
-            color: #cbd5e1;
+            color: var(--text-light);
         }
+
         .lista-itens li .actions {
             display: flex;
             gap: 0.5rem;
+            justify-content: flex-end;
         }
 
-        /* Estilos para a lista de agendamentos */
+        /* AGENDAMENTOS */
         #listaAgendamentos {
             list-style: none;
             padding: 0;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
         }
 
         #listaAgendamentos li {
-            background-color: #0f172a;
+            background-color: var(--dark);
             border: 1px solid #334155;
             border-radius: 8px;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             padding: 1rem;
             display: flex;
-            flex-direction: column; /* Para empilhar informações e botões */
+            flex-direction: column;
             gap: 0.8rem;
-            position: relative; /* Para posicionamento do status */
+            position: relative;
         }
 
-        #listaAgendamentos li .agendamento-info {
-            flex-grow: 1;
+        #listaAgendamentos li .agendamento-info h4 {
+            margin: 0 0 0.3rem 0;
+            color: var(--primary);
+            font-size: 1rem;
         }
 
-        #listaAgendamentos li h4 {
-            margin: 0 0 0.5rem 0;
-            color: #facc15;
-            font-size: 1.1rem;
-        }
-
-        #listaAgendamentos li p {
+        #listaAgendamentos li .agendamento-info p {
             margin: 0;
             font-size: 0.9rem;
-            color: #cbd5e1;
+            color: var(--text-light);
         }
 
-        #listaAgendamentos li .agendamento-status {
+        .agendamento-status {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 0.3rem 0.6rem;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.2rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8em;
+            font-size: 0.7rem;
             font-weight: bold;
-            color: #0f172a;
         }
 
-        /* Cores dos status */
-        .status-pendente { background-color: #facc15; } /* Amarelo */
-        .status-confirmado { background-color: #22c55e; color: white !important; } /* Verde */
-        .status-cancelado { background-color: #ef4444; color: white !important; } /* Vermelho */
-        .status-concluido { background-color: #3b82f6; color: white !important; } /* Azul */
-        .status-cortando { background-color: #a855f7; color: white !important; } /* Roxo (novo status) */
-
+        .status-pendente { background-color: var(--primary); color: var(--dark); }
+        .status-confirmado { background-color: #22c55e; color: white; }
+        .status-cancelado { background-color: #ef4444; color: white; }
+        .status-concluido { background-color: #3b82f6; color: white; }
+        .status-cortando { background-color: #a855f7; color: white; }
 
         #listaAgendamentos li .actions {
             display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap; /* Permite que os botões quebrem a linha se necessário */
-            justify-content: flex-end; /* Alinha os botões à direita */
-            margin-top: 0.8rem; /* Espaçamento entre info e botões */
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         #listaAgendamentos li .actions button,
-        #listaAgendamentos li .actions a.btn-whatsapp { /* Adicionado estilo para o link do WhatsApp */
-            background-color: #334155;
-            color: #e2e8f0;
-            border: none;
-            padding: 0.6rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
+        #listaAgendamentos li .actions a {
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
             font-weight: bold;
-            transition: background-color 0.2s;
-            text-decoration: none; /* Para links */
-            display: inline-flex; /* Para links, para que padding funcione bem */
-            align-items: center; /* Para links, para centralizar texto */
-            justify-content: center; /* Para links */
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        #listaAgendamentos li .actions button:hover,
-        #listaAgendamentos li .actions a.btn-whatsapp:hover { /* Adicionado hover para o link do WhatsApp */
-            background-color: #475569;
+        .btn-confirmar { background-color: #22c55e; color: white; }
+        .btn-cancelar { background-color: #ef4444; color: white; }
+        .btn-concluir { background-color: #3b82f6; color: white; }
+        .btn-whatsapp { background-color: #25d366; color: white; }
+
+        /* VERSÃO PARA TABLET */
+        @media (min-width: 600px) {
+            .cards {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .horarios-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .lista-itens li {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .lista-itens li img {
+                width: 80px;
+                height: 80px;
+                max-height: none;
+            }
         }
 
-        #listaAgendamentos li .actions button.btn-confirmar {
-            background-color: #22c55e; /* Verde */
-            color: white;
+        /* VERSÃO PARA DESKTOP */
+        @media (min-width: 900px) {
+            body {
+                padding: 0;
+            }
+            
+            header {
+                padding: 1rem 2rem;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            nav {
+                padding: 0.5rem 2rem;
+            }
+            
+            .main {
+                padding: 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .form-section {
+                max-width: 600px;
+                margin: 2rem auto;
+            }
+            
+            .horarios-grid {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 0.8rem;
+            }
+            
+            #listaAgendamentos li {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            #listaAgendamentos li .agendamento-info {
+                flex-grow: 1;
+            }
+            
+            #listaAgendamentos li .actions {
+                margin-top: 0;
+            }
         }
-        #listaAgendamentos li .actions button.btn-cancelar {
-            background-color: #ef4444; /* Vermelho */
-            color: white;
-        }
-        #listaAgendamentos li .actions button.btn-concluir {
-            background-color: #3b82f6; /* Azul */
-            color: white;
-        }
-        #listaAgendamentos li .actions a.btn-whatsapp { /* Estilo específico para o WhatsApp */
-            background-color: #25d366; /* Verde WhatsApp */
-            color: white;
-        }
-        /* FIM DO CÓDIGO CSS */
     </style>
 </head>
 <body>
 
+    <!-- Modal de Login -->
+    <div id="loginModal" class="login-overlay">
+        <div class="login-box">
+            <h2>Acesso Administrativo</h2>
+            <p>Por favor, insira a senha para continuar</p>
+            <input type="password" id="adminPassword" placeholder="Senha de acesso">
+            <button onclick="verificarSenha()">Acessar</button>
+            <p id="loginError" class="login-error">Senha incorreta. Tente novamente.</p>
+        </div>
+    </div>
+
+    <!-- Conteúdo do Painel (só aparece após login) -->
     <header>
-        <h1>Painel Administrativo - Silva do Corte</h1>
-        <div class="top-right">
-            <button>Hoje (<span id="countHojeAgendamentos">0</span>)</button>
-            <button class="sair" onclick="fazerLogout()">Sair</button>
-            <a class="btn-agendar" href="index.html"></a>
+        <div class="header-top">
+            <h1>Painel Administrativo - Silva do Corte</h1>
+            <div class="top-right">
+                <button>Hoje (<span id="countHojeAgendamentos">0</span>)</button>
+                <button class="sair" onclick="fazerLogout()">Sair</button>
+            </div>
         </div>
     </header>
 
@@ -388,7 +584,7 @@
     </nav>
 
     <div class="main">
-
+        <!-- Conteúdo das abas -->
         <div id="agendamentos" class="tab-content active">
             <h2>Agendamentos (<span id="agendamentosCount">0</span>)</h2>
             <div class="cards">
@@ -411,8 +607,7 @@
 
             <div class="horarios-container">
                 <h3 id="horariosSelecionadosTitulo">Horários (0 selecionados)</h3>
-                <div id="horariosGrid" class="horarios-grid">
-                </div>
+                <div id="horariosGrid" class="horarios-grid"></div>
                 <div class="no-data" id="noHorariosMessage" style="display: none;">
                     <p>Selecione uma data para gerenciar os horários disponíveis.</p>
                 </div>
@@ -431,7 +626,7 @@
                 <input type="text" id="nomeServico" placeholder="Ex: Corte de Cabelo" required>
                 
                 <label for="fotoServico">Foto:</label>
-                <input type="file" id="fotoServico" accept="image/*" style="background-color: #334155; color: #fff;">
+                <input type="file" id="fotoServico" accept="image/*">
                 <div id="previewContainerServico" style="margin-bottom: 1rem; display: none;">
                     <label>Foto Atual:</label><br>
                     <img id="fotoPreviewServico" src="" alt="Pré-visualização" style="max-width: 100px; max-height: 100px; border-radius: 4px; margin-top: 5px;">
@@ -457,7 +652,7 @@
                 <input type="text" id="nomeProduto" placeholder="Ex: Pomada Modeladora" required>
                 
                 <label for="fotoProduto">Foto:</label>
-                <input type="file" id="fotoProduto" accept="image/*" style="background-color: #334155; color: #fff;">
+                <input type="file" id="fotoProduto" accept="image/*">
                 <div id="previewContainerProduto" style="margin-bottom: 1rem; display: none;">
                     <label>Foto Atual:</label><br>
                     <img id="fotoPreviewProduto" src="" alt="Pré-visualização" style="max-width: 100px; max-height: 100px; border-radius: 4px; margin-top: 5px;">
@@ -493,24 +688,61 @@
                 <ul id="listaLembretes"></ul>
             </div>
         </div>
-
     </div>
 
     <script>
-        /* INÍCIO DO CÓDIGO JAVASCRIPT */
+        /* CONSTANTES */
+        const ADMIN_PASSWORD = "silva2025";
+        const LS_AUTH_KEY = "adminAuthToken";
         const LS_HORARIOS_KEY = 'horariosDisponiveis';
         const LS_SERVICOS_KEY = 'servicosSilvaDoCorte'; 
         const LS_PRODUTOS_KEY = 'produtosSilvaDoCorte';
         const LS_DATAS_BLOQUEADAS_KEY = 'datasBloqueadas';
         const LS_LEMBRETES_KEY = 'lembretes';
         const LS_AGENDAMENTOS_CLIENTES_KEY = 'agendamentosSilvaDoCorte';
+        const WHATSAPP_NUMBER = '5588993143575';
 
-        // Função para o botão "Sair"
+        /* AUTENTICAÇÃO */
+        function verificarSenha() {
+            const senha = document.getElementById('adminPassword').value;
+            const errorMsg = document.getElementById('loginError');
+            
+            if (senha === ADMIN_PASSWORD) {
+                // Cria token de autenticação
+                const authToken = btoa(`admin:${Date.now()}`);
+                localStorage.setItem(LS_AUTH_KEY, authToken);
+                
+                // Esconde o modal e mostra o conteúdo
+                document.getElementById('loginModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+                
+                // Inicializa a aplicação
+                inicializarAplicacao();
+            } else {
+                errorMsg.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+        
+        function verificarAutenticacao() {
+            const authToken = localStorage.getItem(LS_AUTH_KEY);
+            if (!authToken) return false;
+            
+            try {
+                const decoded = atob(authToken).split(':');
+                return decoded[0] === 'admin';
+            } catch (e) {
+                return false;
+            }
+        }
+        
         function fazerLogout() {
+            localStorage.removeItem(LS_AUTH_KEY);
             window.location.href = 'index.html';
         }
 
-        // Funções de Utilitários de Data/Hora
+        /* UTILITÁRIOS */
         function timeToMinutes(timeStr) {
             const [hours, minutes] = timeStr.split(':').map(Number);
             return hours * 60 + minutes;
@@ -522,13 +754,22 @@
             return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
         }
 
-        // Função para alternar abas
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        /* GERENCIAMENTO DE ABAS */
         function mostrarAba(id, event) {
             document.querySelectorAll('.tab-content').forEach(div => div.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            
             document.getElementById(id).classList.add('active');
             event.target.classList.add('active');
 
+            // Carrega os dados específicos da aba
             if (id === 'horarios') {
                 carregarHorariosData();
             } else if (id === 'servicos') {
@@ -546,12 +787,11 @@
             }
         }
 
-        // AGENDAMENTOS
+        /* AGENDAMENTOS */
         function renderizarAgendamentos() {
             const agendamentosClientes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
-            const agendamentosDiv = document.getElementById('agendamentos');
             const noDataMessage = document.getElementById('noAgendamentosMessage');
-            const cardsDiv = agendamentosDiv.querySelector('.cards');
+            const cardsDiv = document.querySelector('.cards');
             const listaAgendamentos = document.getElementById('listaAgendamentos');
             listaAgendamentos.innerHTML = '';
 
@@ -566,7 +806,7 @@
 
             if (agendamentosClientes.length === 0) {
                 noDataMessage.style.display = 'block';
-                cardsDiv.style.display = 'flex'; 
+                cardsDiv.style.display = 'grid'; 
                 cards[0].textContent = '0';
                 cards[1].textContent = '0';
                 cards[2].textContent = '0';
@@ -578,21 +818,25 @@
 
             noDataMessage.style.display = 'none';
 
+            // Ordena agendamentos por data/hora
             agendamentosClientes.sort((a, b) => {
                 const dateA = new Date(`${a.data}T${a.hora}`);
                 const dateB = new Date(`${b.data}T${b.hora}`);
                 return dateA - dateB;
             });
 
+            // Processa cada agendamento
             agendamentosClientes.forEach((agendamento, index) => {
                 const agendamentoDate = new Date(agendamento.data + 'T00:00:00');
                 const agendamentoDateTime = new Date(`${agendamento.data}T${agendamento.hora}`);
 
+                // Calcula faturamento
                 if (agendamento.status === 'concluido') {
                     const valorDoServico = parseFloat(agendamento.valorServico || 0);
                     faturamentoTotal += valorDoServico;
                 }
 
+                // Conta agendamentos
                 if (agendamentoDateTime.getTime() >= now.getTime() && agendamento.status !== 'cancelado') {
                     proximosCount++;
                 }
@@ -600,32 +844,17 @@
                     hojeCount++;
                 }
 
+                // Cria elemento do agendamento
                 const li = document.createElement('li');
                 
-                let statusClass = '';
-                switch (agendamento.status) {
-                    case 'pendente':
-                        statusClass = 'status-pendente';
-                        break;
-                    case 'confirmado':
-                        statusClass = 'status-confirmado';
-                        break;
-                    case 'cancelado':
-                        statusClass = 'status-cancelado';
-                        break;
-                    case 'concluido':
-                        statusClass = 'status-concluido';
-                        break;
-                    case 'cortando':
-                        statusClass = 'status-cortando';
-                        break;
-                    default:
-                        statusClass = 'status-pendente';
-                        break;
-                }
-
+                // Define classe de status
+                let statusClass = 'status-' + (agendamento.status || 'pendente');
+                
+                // Formata valores
                 const valorFormatado = parseFloat(agendamento.valorServico || 0).toFixed(2).replace('.', ',');
                 const telefoneLimpo = agendamento.telefone ? agendamento.telefone.replace(/\D/g, '') : '';
+                
+                // Cria mensagem para WhatsApp
                 const mensagemWhatsApp = encodeURIComponent(
                     `Olá ${agendamento.nomeCliente}, tudo bem? ` +
                     `Este é um lembrete do seu agendamento no Silva do Corte para um(a) ${agendamento.servico} ` +
@@ -633,23 +862,25 @@
                 );
                 const linkWhatsApp = `https://wa.me/${telefoneLimpo}?text=${mensagemWhatsApp}`;
 
+                // Monta HTML do agendamento
                 li.innerHTML = `
                     <div class="agendamento-info">
                         <h4>${agendamento.servico} - ${agendamento.data} às ${agendamento.hora}</h4>
                         <p>Cliente: ${agendamento.nomeCliente} - ${agendamento.telefone || 'Telefone não informado'}</p>
                         <p>Valor: R$ ${valorFormatado}</p>
                     </div>
-                    <span class="agendamento-status ${statusClass}">${agendamento.status.charAt(0).toUpperCase() + agendamento.status.slice(1)}</span>
+                    <span class="agendamento-status ${statusClass}">${(agendamento.status || 'pendente').charAt(0).toUpperCase() + (agendamento.status || 'pendente').slice(1)}</span>
                     <div class="actions">
                         ${agendamento.status !== 'cancelado' && agendamento.status !== 'concluido' ? `<button class="btn-cancelar" onclick="mudarStatusAgendamento(${index}, 'cancelado')">Cancelar</button>` : ''}
-                        ${agendamento.status !== 'concluido' ? `<button class="btn-concluir" onclick="mudarStatusAgendamento(${index}, 'concluido')">Marcar como Concluído</button>` : ''}
-                        ${telefoneLimpo ? `<a href="${linkWhatsApp}" target="_blank" class="btn-whatsapp">Alertar no WhatsApp</a>` : ''}
+                        ${agendamento.status !== 'concluido' ? `<button class="btn-concluir" onclick="mudarStatusAgendamento(${index}, 'concluido')">Concluir</button>` : ''}
+                        ${telefoneLimpo ? `<a href="${linkWhatsApp}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
                         ${(agendamento.status === 'concluido' || agendamento.status === 'cancelado') ? `<button class="delete-btn" onclick="excluirAgendamento(${index})">Excluir</button>` : ''}
                     </div>
                 `;
                 listaAgendamentos.appendChild(li);
             });
 
+            // Atualiza contadores
             cards[0].textContent = proximosCount;
             cards[1].textContent = hojeCount;
             cards[2].textContent = totalCount;
@@ -658,75 +889,67 @@
             document.getElementById('countHojeAgendamentos').textContent = hojeCount;
         }
 
-    function mudarStatusAgendamento(index, newStatus) {
-    let agendamentosClientes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
-    if (index >= 0 && index < agendamentosClientes.length) {
-        const agendamento = agendamentosClientes[index];
-        const oldStatus = agendamento.status;
-        
-        if (oldStatus === newStatus) return;
-        
-        agendamento.status = newStatus;
+        function mudarStatusAgendamento(index, newStatus) {
+            let agendamentosClientes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
+            if (index >= 0 && index < agendamentosClientes.length) {
+                const agendamento = agendamentosClientes[index];
+                const oldStatus = agendamento.status;
+                
+                if (oldStatus === newStatus) return;
+                
+                agendamento.status = newStatus;
 
-        let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
-        const dataAgendamento = agendamento.data;
-        const horaAgendamento = agendamento.hora;
-
-        if (horariosSalvos[dataAgendamento]) {
-            const horarioParaAtualizar = horariosSalvos[dataAgendamento].find(h => h.time === horaAgendamento);
-            if (horarioParaAtualizar) {
+                // Atualiza status no localStorage de horários se for cancelamento
                 if (newStatus === 'cancelado') {
-                    // Libera completamente o horário para novos agendamentos
-                    horarioParaAtualizar.status = 'selected'; // Volta para disponível
-                    horarioParaAtualizar.bookedBy = undefined;
+                    let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
+                    const dataAgendamento = agendamento.data;
                     
-                    // Atualiza imediatamente a interface
-                    renderizarAgendamentos();
-                    carregarHorariosData(); // Recarrega os horários para mostrar a disponibilidade
-                } else if (newStatus === 'pendente' || newStatus === 'confirmado') {
-                    horarioParaAtualizar.status = 'occupied';
-                    horarioParaAtualizar.bookedBy = agendamento.nomeCliente;
-                }
-            }
-        }
-
-        agendamentosClientes[index] = agendamento;
-        localStorage.setItem(LS_HORARIOS_KEY, JSON.stringify(horariosSalvos));
-        localStorage.setItem(LS_AGENDAMENTOS_CLIENTES_KEY, JSON.stringify(agendamentosClientes));
-        
-        alert(`Agendamento de ${agendamento.nomeCliente} foi ${newStatus.toUpperCase()}. O horário está disponível para novos agendamentos.`);
-    }
-}
-
-    function excluirAgendamento(index) {
-    if (confirm('Tem certeza que deseja EXCLUIR este agendamento? Esta ação é irreversível.')) {
-        let agendamentosClientes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
-        const agendamento = agendamentosClientes[index];
-
-        if (agendamento.status !== 'cancelado' && agendamento.status !== 'concluido') {
-            let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
-            const dataAgendamento = agendamento.data;
-            const horaAgendamento = agendamento.hora;
-            if (horariosSalvos[dataAgendamento]) {
-                const horarioParaAtualizar = horariosSalvos[dataAgendamento].find(h => h.time === horaAgendamento);
-                if (horarioParaAtualizar) {
-                    // Libera o horário apenas se estava ocupado por este agendamento
-                    if (horarioParaAtualizar.bookedBy === agendamento.nomeCliente || 
-                        !horarioParaAtualizar.bookedBy) {
-                        horarioParaAtualizar.status = 'available';
-                        horarioParaAtualizar.bookedBy = undefined;
+                    if (horariosSalvos[dataAgendamento]) {
+                        const horarioIndex = horariosSalvos[dataAgendamento].findIndex(h => h.time === agendamento.hora);
+                        if (horarioIndex !== -1) {
+                            horariosSalvos[dataAgendamento][horarioIndex].status = 'available';
+                            horariosSalvos[dataAgendamento][horarioIndex].bookedBy = undefined;
+                            localStorage.setItem(LS_HORARIOS_KEY, JSON.stringify(horariosSalvos));
+                        }
                     }
                 }
+
+                agendamentosClientes[index] = agendamento;
+                localStorage.setItem(LS_AGENDAMENTOS_CLIENTES_KEY, JSON.stringify(agendamentosClientes));
+                renderizarAgendamentos();
+                
+                if (newStatus === 'cancelado') {
+                    carregarHorariosData(); // Atualiza a exibição dos horários
+                }
             }
-            localStorage.setItem(LS_HORARIOS_KEY, JSON.stringify(horariosSalvos));
         }
 
-        agendamentosClientes.splice(index, 1);
-        localStorage.setItem(LS_AGENDAMENTOS_CLIENTES_KEY, JSON.stringify(agendamentosClientes));
-        renderizarAgendamentos();
-        alert('Agendamento excluído com sucesso.');
-    }
-}
+        function excluirAgendamento(index) {
+            if (confirm('Tem certeza que deseja EXCLUIR este agendamento? Esta ação é irreversível.')) {
+                let agendamentosClientes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
+                const agendamento = agendamentosClientes[index];
+
+                // Se não estiver cancelado/concluído, libera o horário
+                if (agendamento.status !== 'cancelado' && agendamento.status !== 'concluido') {
+                    let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
+                    const dataAgendamento = agendamento.data;
+                    
+                    if (horariosSalvos[dataAgendamento]) {
+                        const horarioIndex = horariosSalvos[dataAgendamento].findIndex(h => h.time === agendamento.hora);
+                        if (horarioIndex !== -1) {
+                            horariosSalvos[dataAgendamento][horarioIndex].status = 'available';
+                            horariosSalvos[dataAgendamento][horarioIndex].bookedBy = undefined;
+                            localStorage.setItem(LS_HORARIOS_KEY, JSON.stringify(horariosSalvos));
+                        }
+                    }
+                }
+
+                agendamentosClientes.splice(index, 1);
+                localStorage.setItem(LS_AGENDAMENTOS_CLIENTES_KEY, JSON.stringify(agendamentosClientes));
+                renderizarAgendamentos();
+                alert('Agendamento excluído com sucesso.');
+            }
+        }
 
         function verificarEAtualizarStatusAgendamentos() {
             let agendamentosClientes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
@@ -740,20 +963,26 @@
                 const duracaoServicoMinutos = 45;
                 const agendamentoFimMinutos = agendamentoHourMinutes + duracaoServicoMinutos;
 
+                // Verifica se está em andamento
                 if ((agendamento.status === 'pendente' || agendamento.status === 'confirmado') && 
                     agendamentoDateTime.toDateString() === now.toDateString() && 
                     currentHourMinutes >= agendamentoHourMinutes && 
                     currentHourMinutes < agendamentoFimMinutos) {
                     
-                    agendamento.status = 'cortando';
-                    changed = true;
+                    if (agendamento.status !== 'cortando') {
+                        agendamento.status = 'cortando';
+                        changed = true;
+                    }
                 }
+                // Verifica se já deveria ter terminado
                 else if ((agendamento.status === 'cortando' || agendamento.status === 'pendente' || agendamento.status === 'confirmado') &&
                          agendamentoDateTime.toDateString() === now.toDateString() && 
                          currentHourMinutes >= agendamentoFimMinutos) {
                     
-                    agendamento.status = 'concluido';
-                    changed = true;
+                    if (agendamento.status !== 'concluido') {
+                        agendamento.status = 'concluido';
+                        changed = true;
+                    }
                 }
             });
 
@@ -763,190 +992,124 @@
             }
         }
 
-        // HORÁRIOS
-    function carregarHorariosData() {
-    const data = document.getElementById('dataHorario').value;
-    if (!data) {
-        document.getElementById('noHorariosMessage').style.display = 'block';
-        document.getElementById('horariosSelecionadosTitulo').style.display = 'none';
-        return;
-    }
-
-    // Gera todos os horários das 8h às 23h com intervalo de 30min
-    const todosHorarios = [];
-    for (let hora = 8; hora <= 23; hora++) {
-        for (let minuto = 0; minuto < 60; minuto += 45) {
-            if (hora === 23 && minuto > 0) break; // Não passa das 23h
-            const horario = `${String(hora).padStart(2, '0')}:${String(minuto).padStart(2, '0')}`;
-            todosHorarios.push(horario);
-        }
-    }
-
-    // Verifica horários já salvos
-    let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
-    let horariosDaData = horariosSalvos[data] || [];
-
-    // Cria objetos de horário com status
-    const horariosParaExibir = todosHorarios.map(time => {
-        const horarioSalvo = horariosDaData.find(h => h.time === time);
-        return {
-            time,
-            status: horarioSalvo ? horarioSalvo.status : 'available' // Novo horário começa como não selecionado
-        };
-    });
-
-    // Atualiza com agendamentos existentes
-    const agendamentos = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
-    const agendamentosNaData = agendamentos.filter(a => 
-        a.data === data && 
-        a.status !== 'cancelado' && 
-        a.status !== 'concluido'
-    );
-
-    // Renderiza
-    renderizarHorarios(horariosParaExibir, agendamentosNaData);
-    updateSelectedHorariosCount();
-    document.getElementById('noHorariosMessage').style.display = 'none';
-}
-
-function renderizarHorarios(horarios, agendamentosNaData) {
-    const horariosGrid = document.getElementById('horariosGrid');
-    horariosGrid.innerHTML = '';
-
-    horarios.forEach(h => {
-        const button = document.createElement('button');
-        button.classList.add('horario-btn');
-        button.textContent = h.time;
-        button.dataset.time = h.time;
-        
-        // Verifica se está ocupado por agendamento
-        const ocupado = agendamentosNaData.some(a => a.hora === h.time);
-        
-        if (ocupado) {
-            button.classList.add('occupied');
-            button.disabled = true;
-        } else if (h.status === 'selected') {
-            button.classList.add('selected');
-        }
-        
-        button.onclick = function() {
-            if (!button.classList.contains('occupied')) {
-                this.classList.toggle('selected');
-                updateSelectedHorariosCount();
+        /* HORÁRIOS */
+        function carregarHorariosData() {
+            const data = document.getElementById('dataHorario').value;
+            if (!data) {
+                document.getElementById('noHorariosMessage').style.display = 'block';
+                document.getElementById('horariosSelecionadosTitulo').style.display = 'none';
+                return;
             }
-        };
-        
-        horariosGrid.appendChild(button);
-    });
-}
 
-        function gerarHorariosInternamente(inicioStr, fimStr, intervalo) {
-            const inicioMinutos = timeToMinutes(inicioStr);
-            const fimMinutos = timeToMinutes(fimStr);
-            
-            const horariosGerados = [];
-            for (let min = inicioMinutos; min <= fimMinutos; min += intervalo) {
-                const horario = minutesToTime(min);
-                horariosGerados.push({ time: horario, status: 'available' });
+            // Gera todos os horários das 8h às 23h com intervalo de 45min
+            const todosHorarios = [];
+            for (let hora = 8; hora <= 23; hora++) {
+                for (let minuto = 0; minuto < 60; minuto += 45) {
+                    if (hora === 23 && minuto > 0) break; // Não passa das 23h
+                    const horario = `${String(hora).padStart(2, '0')}:${String(minuto).padStart(2, '0')}`;
+                    todosHorarios.push(horario);
+                }
             }
-            return horariosGerados.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+
+            // Verifica horários já salvos
+            let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
+            let horariosDaData = horariosSalvos[data] || [];
+
+            // Cria objetos de horário com status
+            const horariosParaExibir = todosHorarios.map(time => {
+                const horarioSalvo = horariosDaData.find(h => h.time === time);
+                return {
+                    time,
+                    status: horarioSalvo ? horarioSalvo.status : 'available'
+                };
+            });
+
+            // Renderiza os horários
+            renderizarHorarios(horariosParaExibir);
+            updateSelectedHorariosCount();
+            document.getElementById('noHorariosMessage').style.display = 'none';
         }
 
         function renderizarHorarios(horarios) {
-    const horariosGrid = document.getElementById('horariosGrid');
-    horariosGrid.innerHTML = ''; 
+            const horariosGrid = document.getElementById('horariosGrid');
+            horariosGrid.innerHTML = '';
 
-    if (horarios.length === 0) return;
+            if (horarios.length === 0) return;
 
-    // Verifica agendamentos existentes para marcar horários ocupados
-    const agendamentos = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
-    const dataSelecionada = document.getElementById('dataHorario').value;
-    const agendamentosNaData = agendamentos.filter(a => 
-        a.data === dataSelecionada && 
-        a.status !== 'cancelado' && 
-        a.status !== 'concluido'
-    );
+            // Verifica agendamentos existentes para marcar horários ocupados
+            const agendamentos = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
+            const dataSelecionada = document.getElementById('dataHorario').value;
+            const agendamentosNaData = agendamentos.filter(a => 
+                a.data === dataSelecionada && 
+                a.status !== 'cancelado' && 
+                a.status !== 'concluido'
+            );
 
-    horarios.forEach((h) => {
-        const button = document.createElement('button');
-        button.classList.add('horario-btn');
-        button.textContent = h.time;
-        button.dataset.time = h.time;
-        
-        // Verifica se há agendamento ativo para este horário
-        const temAgendamento = agendamentosNaData.some(a => a.hora === h.time);
-        
-        if (temAgendamento) {
-            button.classList.add('occupied');
-            button.disabled = true;
-        } else if (h.status === 'selected') {
-            button.classList.add('selected');
-        }
-        
-        button.onclick = function() { 
-            if (!button.classList.contains('occupied')) {
-                toggleHorarioAvailability(this); 
-            }
-        };
-        
-        horariosGrid.appendChild(button);
-    });
-}
-
-        function toggleHorarioAvailability(button) {
-            const data = document.getElementById('dataHorario').value;
-            if (!data) {
-                alert('Por favor, selecione uma data primeiro.');
-                return;
-            }
-            button.classList.toggle('selected');
-            updateSelectedHorariosCount(); 
+            horarios.forEach((h) => {
+                const button = document.createElement('button');
+                button.classList.add('horario-btn');
+                button.textContent = h.time;
+                button.dataset.time = h.time;
+                
+                // Verifica se há agendamento ativo para este horário
+                const temAgendamento = agendamentosNaData.some(a => a.hora === h.time);
+                
+                if (temAgendamento) {
+                    button.classList.add('occupied');
+                    button.disabled = true;
+                } else if (h.status === 'selected') {
+                    button.classList.add('selected');
+                }
+                
+                button.onclick = function() { 
+                    if (!button.classList.contains('occupied')) {
+                        this.classList.toggle('selected');
+                        updateSelectedHorariosCount();
+                    }
+                };
+                
+                horariosGrid.appendChild(button);
+            });
         }
 
         function updateSelectedHorariosCount() {
             const count = document.querySelectorAll('#horariosGrid .horario-btn.selected').length;
-            document.getElementById('horariosSelecionadosTitulo').textContent = `Horários (${count} selecionados)`;
+            const titulo = document.getElementById('horariosSelecionadosTitulo');
+            titulo.textContent = `Horários (${count} selecionados)`;
+            titulo.style.display = 'block';
         }
 
         function salvarHorariosManualmente() {
-    const data = document.getElementById('dataHorario').value;
-    if (!data) {
-        alert('Selecione uma data para salvar os horários.');
-        return;
-    }
+            const data = document.getElementById('dataHorario').value;
+            if (!data) {
+                alert('Selecione uma data para salvar os horários.');
+                return;
+            }
 
-    let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
-    let updatedHorarios = [];
-    
-    const currentButtons = document.querySelectorAll('#horariosGrid .horario-btn');
-    currentButtons.forEach(button => {
-        const time = button.dataset.time;
-        let status = button.classList.contains('selected') ? 'selected' : 'available';
-        
-        // Mantém o status 'occupied' se já estiver ocupado
-        const existingHorario = horariosSalvos[data]?.find(h => h.time === time);
-        if (existingHorario && existingHorario.status === 'occupied') {
-            status = 'occupied';
+            let horariosSalvos = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY)) || {};
+            let updatedHorarios = [];
+            
+            const currentButtons = document.querySelectorAll('#horariosGrid .horario-btn');
+            currentButtons.forEach(button => {
+                const time = button.dataset.time;
+                let status = button.classList.contains('selected') ? 'selected' : 'available';
+                
+                // Mantém o status 'occupied' se já estiver ocupado
+                if (button.classList.contains('occupied')) {
+                    status = 'occupied';
+                }
+                
+                updatedHorarios.push({ time, status });
+            });
+
+            updatedHorarios.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
+            horariosSalvos[data] = updatedHorarios;
+            localStorage.setItem(LS_HORARIOS_KEY, JSON.stringify(horariosSalvos));
+            alert('Horários salvos com sucesso!');
+            carregarHorariosData();
         }
-        
-        updatedHorarios.push({ time, status });
-    });
 
-    updatedHorarios.sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time));
-    horariosSalvos[data] = updatedHorarios;
-    localStorage.setItem(LS_HORARIOS_KEY, JSON.stringify(horariosSalvos));
-    alert('Horários salvos com sucesso!');
-    carregarHorariosData();
-}
-
-        // SERVIÇOS
-        const toBase64 = file => new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-
+        /* SERVIÇOS */
         async function adicionarOuEditarServico() {
             const index = document.getElementById('servicoIndex').value;
             const nome = document.getElementById('nomeServico').value.trim();
@@ -955,7 +1118,7 @@ function renderizarHorarios(horarios, agendamentosNaData) {
             const fileInput = document.getElementById('fotoServico');
             const file = fileInput.files[0];
 
-            if (!nome || isNaN(valor) || valor <= 0) {
+            if (!nome || isNaN(valor)) {
                 alert('Por favor, insira um nome e um valor válido.');
                 return;
             }
@@ -1033,8 +1196,6 @@ function renderizarHorarios(horarios, agendamentosNaData) {
 
             document.getElementById('servicoIndex').value = index;
             document.getElementById('btnAdicionarEditarServico').textContent = 'Salvar Alterações';
-            
-            document.getElementById('nomeServico').focus();
         }
 
         function removerServico(index) {
@@ -1060,7 +1221,7 @@ function renderizarHorarios(horarios, agendamentosNaData) {
             document.getElementById('btnAdicionarEditarServico').textContent = 'Adicionar Serviço';
         }
 
-        // PRODUTOS
+        /* PRODUTOS */
         async function adicionarOuEditarProduto() {
             const index = document.getElementById('produtoIndex').value;
             const nome = document.getElementById('nomeProduto').value.trim();
@@ -1069,7 +1230,7 @@ function renderizarHorarios(horarios, agendamentosNaData) {
             const fileInput = document.getElementById('fotoProduto');
             const file = fileInput.files[0];
 
-            if (!nome || isNaN(valor) || valor <= 0) {
+            if (!nome || isNaN(valor)) {
                 alert('Por favor, insira um nome e um valor válido.');
                 return;
             }
@@ -1147,8 +1308,6 @@ function renderizarHorarios(horarios, agendamentosNaData) {
 
             document.getElementById('produtoIndex').value = index;
             document.getElementById('btnAdicionarEditarProduto').textContent = 'Salvar Alterações';
-            
-            document.getElementById('nomeProduto').focus();
         }
 
         function removerProduto(index) {
@@ -1174,7 +1333,7 @@ function renderizarHorarios(horarios, agendamentosNaData) {
             document.getElementById('btnAdicionarEditarProduto').textContent = 'Adicionar Produto';
         }
 
-        // DATAS BLOQUEADAS
+        /* DATAS BLOQUEADAS */
         function bloquearData() {
             const data = document.getElementById('dataBloqueio').value;
             if (!data) {
@@ -1222,7 +1381,7 @@ function renderizarHorarios(horarios, agendamentosNaData) {
             renderizarDatasBloqueadas();
         }
 
-        // LEMBRETES
+        /* LEMBRETES */
         function salvarLembrete() {
             const texto = document.getElementById('lembrete').value.trim();
             if (!texto) {
@@ -1266,8 +1425,8 @@ function renderizarHorarios(horarios, agendamentosNaData) {
             renderizarLembretes();
         }
 
-        // Inicialização ao carregar a página
-        document.addEventListener('DOMContentLoaded', () => {
+        /* INICIALIZAÇÃO */
+        function inicializarAplicacao() {
             const today = new Date();
             const formattedDate = today.toISOString().split('T')[0];
             document.getElementById('dataHorario').value = formattedDate;
@@ -1281,11 +1440,29 @@ function renderizarHorarios(horarios, agendamentosNaData) {
             renderizarAgendamentos();
             
             // Inicia o intervalo para verificar status dos agendamentos
-            clearInterval(window.agendamentoStatusInterval);
             window.agendamentoStatusInterval = setInterval(verificarEAtualizarStatusAgendamentos, 60 * 1000);
-        });
-        /* FIM DO CÓDIGO JAVASCRIPT */
-    </script>
+        }
 
+        /* VERIFICAÇÃO AO CARREGAR A PÁGINA */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verifica autenticação
+            if (verificarAutenticacao()) {
+                document.getElementById('loginModal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+                inicializarAplicacao();
+            } else {
+                document.getElementById('loginModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                document.getElementById('adminPassword').focus();
+            }
+            
+            // Permite enviar o formulário com Enter
+            document.getElementById('adminPassword').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    verificarSenha();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
