@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossos Serviços - Silva do Corte</title>
+    <style>
+        :root {
+            --primary: #facc15;
+            --primary-dark: #e5b300;
+            --dark: #0f172a;
+            --dark-light: #1a273a;
+            --light: #cbd5e1;
+            --success: #22c55e;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 1rem;
+            text-align: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Botão Voltar */
+        .back-button {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100;
+            text-decoration: none;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .header-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin: 0.5rem 0 1.5rem;
+            font-size: 2rem;
+            padding-top: 10px;
+        }
+        
+        .carrossel-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        
+        .carrossel {
+            display: flex;
+            gap: 20px;
+            scroll-snap-type: x mandatory;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 20px 0;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .carrossel::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .servico-card {
+            flex: 0 0 220px;
+            scroll-snap-align: start;
+            background-color: var(--dark-light);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .servico-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .servico-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+        }
+        
+        .servico-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .servico-card:hover img {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(250, 204, 21, 0.4);
+        }
+        
+        .servico-card h2 {
+            color: var(--primary);
+            margin: 0 0 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .servico-card p {
+            font-size: 0.9rem;
+            color: var(--light);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .servico-card .valor {
+            font-weight: bold;
+            color: var(--success);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .servico-card button {
+            background-color: var(--primary);
+            color: black;
+            font-weight: bold;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 160px;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .servico-card button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .no-servicos {
+            color: var(--light);
+            margin-top: 2rem;
+            font-size: 1rem;
+            padding: 1.5rem;
+            background-color: var(--dark-light);
+            border-radius: 8px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .carrossel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: var(--dark-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .carrossel-nav:hover {
+            opacity: 1;
+            background-color: var(--primary);
+            color: black;
+        }
+        
+        .prev {
+            left: 0;
+        }
+        
+        .next {
+            right: 0;
+        }
+        
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 8px;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--light);
+            opacity: 0.5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background-color: var(--primary);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .carrossel-container {
+                padding: 0 20px;
+            }
+            
+            .servico-card {
+                flex: 0 0 75%;
+            }
+            
+            .carrossel-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .back-button {
+                top: 10px;
+                left: 10px;
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                padding-top: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão Voltar -->
+    <button onclick="window.history.back()" class="back-button">Voltar</button>
+    
+    <div class="header-container">
+        <h1>Nossos Serviços</h1>
+    </div>
+    
+    <div class="carrossel-container">
+        <button class="carrossel-nav prev" aria-label="Anterior">&#10094;</button>
+        
+        <div id="servicosCarrossel" class="carrossel">
+            <!-- Serviços serão inseridos aqui pelo JavaScript -->
+        </div>
+        
+        <button class="carrossel-nav next" aria-label="Próximo">&#10095;</button>
+    </div>
+    
+    <div class="dots-container" id="dotsContainer">
+        <!-- Indicadores de posição serão adicionados dinamicamente -->
+    </div>
+    
+    <div id="noServicosMessage" class="no-servicos" style="display: none;">
+        <p>Parece que nenhum serviço foi cadastrado ainda. Por favor, adicione serviços no painel administrativo.</p>
+    </div>
+
+    <script>
+        // Chave que deve ser a mesma usada no painel administrativo
+        const LS_SERVICOS_KEY = 'servicosSilvaDoCorte';
+        const DEFAULT_SERVICE_IMAGE = 'https://cdn-icons-png.flaticon.com/512/2965/2965300.png';
+        
+        // Variáveis para controle do carrossel
+        let currentIndex = 0;
+        let cardsPerView = 3;
+        let totalCards = 0;
+        let cardWidth = 220;
+        let gap = 20;
+
+        function updateCardsPerView() {
+            if (window.innerWidth < 768) {
+                cardsPerView = 1;
+            } else if (window.innerWidth < 1024) {
+                cardsPerView = 2;
+            } else {
+                cardsPerView = 3;
+            }
+        }
+
+        function debugLocalStorage() {
+            console.log("Conteúdo completo do localStorage:");
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                console.log(`Chave: "${key}"`, localStorage.getItem(key));
+            }
+        }
+
+        function carregarESeRenderizarServicos() {
+            debugLocalStorage();
+            
+            const servicosCarrossel = document.getElementById('servicosCarrossel');
+            const noServicosMessage = document.getElementById('noServicosMessage');
+            
+            // Tenta carregar os serviços da chave principal
+            let servicos = JSON.parse(localStorage.getItem(LS_SERVICOS_KEY)) || [];
+            
+            // Se não encontrou, tenta outras chaves possíveis
+            if (servicos.length === 0) {
+                const chavesAlternativas = ['servicos', 'servicosEProdutos', 'services'];
+                for (const chave of chavesAlternativas) {
+                    const dados = localStorage.getItem(chave);
+                    if (dados) {
+                        try {
+                            servicos = JSON.parse(dados);
+                            if (Array.isArray(servicos) && servicos.length > 0) {
+                                console.log(`Serviços encontrados na chave alternativa: ${chave}`);
+                                break;
+                            }
+                        } catch (e) {
+                            console.error(`Erro ao ler chave ${chave}:`, e);
+                        }
+                    }
+                }
+            }
+
+            servicosCarrossel.innerHTML = '';
+            
+            if (servicos.length === 0) {
+                noServicosMessage.style.display = 'block';
+                document.querySelector('.dots-container').style.display = 'none';
+                return;
+            }
+
+            noServicosMessage.style.display = 'none';
+            totalCards = servicos.length;
+            
+            // Criar indicadores de posição (dots)
+            const dotsContainer = document.getElementById('dotsContainer');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < Math.ceil(totalCards / cardsPerView); i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (i === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => scrollToIndex(i));
+                dotsContainer.appendChild(dot);
+            }
+
+            servicos.forEach((servico, index) => {
+                const card = document.createElement('div');
+                card.classList.add('servico-card');
+
+                // Verifica múltiplos nomes possíveis para os campos
+                const nome = servico.nome || servico.name || 'Serviço';
+                const descricao = servico.descricao || servico.description || 'Descrição não disponível';
+                const valor = servico.valor || servico.preco || servico.price || 0;
+                const imagem = servico.fotoUrl || servico.imagem || servico.image || DEFAULT_SERVICE_IMAGE;
+
+                // Formata o valor para exibição
+                const valorFormatado = parseFloat(valor).toFixed(2).replace('.', ',');
+
+                card.innerHTML = `
+                    <img src="${imagem}" alt="${nome}" 
+                         onerror="this.onerror=null;this.src='${DEFAULT_SERVICE_IMAGE}';">
+                    <h2>${nome}</h2>
+                    <p>${descricao}</p>
+                    <span class="valor">R$ ${valorFormatado}</span>
+                    <button onclick="window.location.href='agendamento.html?servico=${encodeURIComponent(nome)}'">Agendar</button>
+                `;
+                servicosCarrossel.appendChild(card);
+            });
+
+            // Atualiza a largura dos cards e gap
+            updateCardsPerView();
+            updateCardStyles();
+        }
+
+        function updateCardStyles() {
+            const cards = document.querySelectorAll('.servico-card');
+            cardWidth = window.innerWidth < 768 ? window.innerWidth * 0.75 : 220;
+            gap = window.innerWidth < 768 ? 15 : 20;
+            
+            cards.forEach(card => {
+                card.style.flex = `0 0 ${cardWidth}px`;
+            });
+            
+            document.querySelector('.carrossel').style.gap = `${gap}px`;
+        }
+
+        function scrollToIndex(index) {
+            const carrossel = document.querySelector('.carrossel');
+            currentIndex = index;
+            
+            const scrollPosition = index * (cardWidth + gap) * cardsPerView;
+            carrossel.scrollTo({
+                left: scrollPosition,
+                behavior: 'smooth'
+            });
+            
+            // Atualiza os dots ativos
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function setupCarrosselNavigation() {
+            document.querySelector('.prev').addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    scrollToIndex(currentIndex - 1);
+                }
+            });
+            
+            document.querySelector('.next').addEventListener('click', () => {
+                if (currentIndex < Math.ceil(totalCards / cardsPerView) - 1) {
+                    scrollToIndex(currentIndex + 1);
+                }
+            });
+            
+            const carrossel = document.querySelector('.carrossel');
+            carrossel.addEventListener('scroll', () => {
+                const scrollPosition = carrossel.scrollLeft;
+                currentIndex = Math.round(scrollPosition / ((cardWidth + gap) * cardsPerView));
+                
+                document.querySelectorAll('.dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
+            });
+        }
+
+        // Atualiza a cada 2 segundos para pegar mudanças no localStorage
+        setInterval(carregarESeRenderizarServicos, 2000);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarESeRenderizarServicos();
+            setupCarrosselNavigation();
+        });
+        
+        window.addEventListener('resize', () => {
+            updateCardsPerView();
+            updateCardStyles();
+            scrollToIndex(currentIndex);
+        });
+    </script>
+</body>
+</html>

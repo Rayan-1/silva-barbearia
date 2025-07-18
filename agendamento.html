@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento - Silva do Corte</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #facc15;
+            margin-bottom: 2rem;
+        }
+        .container {
+            background-color: #1a273a;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cbd5e1;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="tel"],
+        .form-group input[type="date"],
+        .form-group select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            background-color: #0f172a;
+            color: white;
+            font-size: 1rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20d%3D%22M9.293%2012.95l.707.707L15.657%208l-1.414-1.414L10%2010.828l-4.243-4.242-1.414%201.414L9.293%2012.95z%22%20fill%3D%22%23cbd5e1%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group input[type="tel"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #facc15;
+            box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.2);
+        }
+        .btn-submit {
+            background-color: #facc15;
+            color: black;
+            font-weight: bold;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .btn-submit:hover {
+            background-color: #e5b300;
+        }
+        .message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .message.success {
+            background-color: #22c55e;
+            color: white;
+        }
+        .message.error {
+            background-color: #ef4444;
+            color: white;
+        }
+        .message.info {
+            background-color: #3b82f6; /* Cor azul para informações */
+            color: white;
+        }
+        .dialog {
+            background-color: #1a273a;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            margin-top: 2rem;
+            display: none;
+            z-index: 1000;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .dialog p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+        .dialog button {
+            background-color: #facc15;
+            color: black;
+            font-weight: bold;
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .dialog button:hover {
+            background-color: #e5b300;
+        }
+        .dialog button.no {
+            background-color: #475569;
+            color: white;
+        }
+        .dialog button.no:hover {
+            background-color: #64748b;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+        .back-to-services {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        .back-to-services a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-to-services a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Agendamento</h1>
+
+    <div class="container">
+        <form id="agendamentoForm">
+            <div class="form-group">
+                <label for="servicoNome">Serviço:</label>
+                <input type="text" id="servicoNome" name="servicoNome" readonly>
+                <input type="hidden" id="servicoValor" name="servicoValor"> 
+            </div>
+            <div class="form-group">
+                <label for="dataAgendamento">Data do Agendamento:</label>
+                <input type="date" id="dataAgendamento" name="dataAgendamento" required>
+            </div>
+            <div class="form-group">
+                <label for="horaAgendamento">Hora do Agendamento:</label>
+                <select id="horaAgendamento" name="horaAgendamento" required>
+                    <option value="">Selecione um horário</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nomeCliente">Seu Nome:</label>
+                <input type="text" id="nomeCliente" name="nomeCliente" required>
+            </div>
+            <div class="form-group">
+                <label for="telefoneCliente">Seu Telefone (com DDD):</label>
+                <input type="tel" id="telefoneCliente" name="telefoneCliente" required pattern="[0-9]{10,11}" title="Por favor, digite um número de telefone válido (10 ou 11 dígitos, apenas números).">
+            </div>
+            <button type="submit" class="btn-submit">Confirmar Agendamento</button>
+        </form>
+        <div id="agendamentoMessage" class="message" style="display: none;"></div>
+        <div class="back-to-services">
+            <a href="servicos.html">Voltar para a seleção de serviços</a>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+    <div id="paymentDialog" class="dialog">
+        <p>Seu agendamento foi registrado! Deseja fazer o pagamento antecipado?</p>
+        <button id="payYes">Sim, quero pagar agora!</button>
+        <button id="payNo" class="no">Não, obrigado.</button>
+    </div>
+
+    <script>
+        const LS_HORARIOS_KEY_ADMIN = 'horariosDisponiveis'; 
+        const LS_AGENDAMENTOS_CLIENTES_KEY = 'agendamentosSilvaDoCorte'; 
+        const LS_DATAS_BLOQUEADAS_KEY = 'datasBloqueadas'; 
+        const LS_SERVICOS_PRODUTOS_KEY = 'servicosSilvaDoCorte'; 
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const servicoNomeInput = document.getElementById('servicoNome');
+            const servicoValorInput = document.getElementById('servicoValor'); // Novo input oculto para o valor
+            const dataAgendamentoInput = document.getElementById('dataAgendamento');
+            const horaAgendamentoSelect = document.getElementById('horaAgendamento');
+            const agendamentoForm = document.getElementById('agendamentoForm');
+            const agendamentoMessage = document.getElementById('agendamentoMessage');
+            const paymentDialog = document.getElementById('paymentDialog');
+            const overlay = document.getElementById('overlay');
+            const payYesButton = document.getElementById('payYes');
+            const payNoButton = document.getElementById('payNo');
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            dataAgendamentoInput.min = `${year}-${month}-${day}`;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const servicoParam = urlParams.get('servico');
+            let servicoCompleto = null; // Guardará o objeto de serviço completo {nome, valor, etc.}
+
+            // Carrega a lista de serviços para encontrar o serviço completo
+            const servicosProdutos = JSON.parse(localStorage.getItem(LS_SERVICOS_PRODUTOS_KEY)) || [];
+            if (servicoParam) {
+                const decodedServico = decodeURIComponent(servicoParam);
+                servicoNomeInput.value = decodedServico;
+                servicoCompleto = servicosProdutos.find(s => s.nome === decodedServico);
+
+                if (servicoCompleto) {
+                    servicoValorInput.value = servicoCompleto.valor; // Define o valor no input oculto
+                } else {
+                    showMessage('Serviço selecionado não encontrado. Por favor, selecione novamente.', 'error');
+                    agendamentoForm.style.display = 'none';
+                    return;
+                }
+            } else {
+                servicoNomeInput.value = 'Serviço Não Selecionado';
+                showMessage('Por favor, selecione um serviço na página de serviços.', 'error');
+                agendamentoForm.style.display = 'none';
+                return;
+            }
+
+            function gerarSlotsHorarios() {
+    horaAgendamentoSelect.innerHTML = '<option value="">Selecione um horário</option>';
+    
+    const selectedDate = dataAgendamentoInput.value;
+    if (!selectedDate) {
+        showMessage('Por favor, selecione uma data para ver os horários disponíveis.', 'info');
+        return;
+    } else {
+        agendamentoMessage.style.display = 'none';
+    }
+
+    const datasBloqueadas = JSON.parse(localStorage.getItem(LS_DATAS_BLOQUEADAS_KEY)) || [];
+    if (datasBloqueadas.includes(selectedDate)) {
+        showMessage(`A data ${formatDate(selectedDate)} está bloqueada para agendamentos. Por favor, escolha outra data.`, 'info');
+        return;
+    }
+
+    let horariosSalvosDoAdmin = {};
+    try {
+        const storedHorarios = localStorage.getItem(LS_HORARIOS_KEY_ADMIN);
+        if (storedHorarios) {
+            horariosSalvosDoAdmin = JSON.parse(storedHorarios);
+        }
+    } catch (e) {
+        console.error("Erro ao fazer parse dos horários do admin no localStorage:", e);
+        showMessage('Erro ao carregar horários disponíveis. Dados corrompidos.', 'error');
+        return;
+    }
+
+    let horariosDaData = horariosSalvosDoAdmin[selectedDate] || [];
+    // Filtra horários com status 'selected' (disponíveis) ou que foram cancelados
+    horariosDaData = horariosDaData.filter(h => h.status === 'selected' || h.status === 'canceled');
+    
+    console.log(`Horários carregados do admin para ${selectedDate}:`, horariosDaData);
+
+    if (horariosDaData.length === 0) {
+        showMessage('Não há horários configurados para esta data no painel administrativo. Por favor, tente outra data.', 'info');
+        return;
+    }
+
+    const agendamentosExistentes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
+    // Filtra apenas agendamentos não cancelados
+    const agendamentosParaData = agendamentosExistentes.filter(ag => 
+        ag.data === selectedDate && ag.status !== 'cancelado'
+    );
+    console.log("Agendamentos de clientes para a data selecionada:", agendamentosParaData);
+
+    const now = new Date();
+    const todayFormatted = `${year}-${month}-${day}`;
+
+    let availableSlotsCount = 0;
+
+    horariosDaData.forEach(h => {
+        const horaFormatada = h.time;
+        let isDisabled = false;
+        let statusText = '';
+
+        // Verifica se o horário está ocupado no admin E não foi cancelado
+        if (h.status === 'occupied') {
+            // Verifica se existe um agendamento não cancelado para este horário
+            const agendamentoExistente = agendamentosParaData.find(ag => ag.hora === horaFormatada);
+            
+            // Se não houver agendamento ativo, considera como disponível
+            if (!agendamentoExistente) {
+                h.status = 'selected'; // Libera o horário
+                isDisabled = false;
+            } else {
+                isDisabled = true;
+                statusText = ' (Indisponível)';
+            }
+        } 
+        
+        // Verifica se já existe um agendamento ativo para este horário
+        const isBookedByClient = agendamentosParaData.some(ag => ag.hora === horaFormatada);
+        if (isBookedByClient) {
+            isDisabled = true;
+            statusText = ' (Indisponível)'; 
+        }
+        
+        // Verifica se o horário já passou (se a data for hoje)
+        const currentSlotDateTime = new Date(`${selectedDate}T${horaFormatada}:00`);
+        if (selectedDate === todayFormatted && currentSlotDateTime.getTime() < now.getTime()) {
+            isDisabled = true;
+            if (!statusText) {
+                statusText = ' (Passado)';
+            }
+        }
+
+        const option = document.createElement('option');
+        option.value = horaFormatada;
+        option.textContent = horaFormatada + statusText;
+        option.disabled = isDisabled;
+
+        if (!isDisabled) {
+            availableSlotsCount++;
+        }
+
+        horaAgendamentoSelect.appendChild(option);
+    });
+
+    // Atualiza os horários no localStorage do admin
+    horariosSalvosDoAdmin[selectedDate] = horariosDaData;
+    localStorage.setItem(LS_HORARIOS_KEY_ADMIN, JSON.stringify(horariosSalvosDoAdmin));
+
+    if (availableSlotsCount === 0) {
+        showMessage('Não há horários disponíveis para agendamento neste dia. Por favor, tente outra data.', 'info');
+    } else {
+        agendamentoMessage.style.display = 'none'; 
+    }
+}
+
+            function formatDate(dateString) {
+                const [year, month, day] = dateString.split('-');
+                return `${day}/${month}/${year}`;
+            }
+
+            dataAgendamentoInput.addEventListener('change', gerarSlotsHorarios);
+
+            if (dataAgendamentoInput.value) {
+                gerarSlotsHorarios();
+            } else {
+                const todayFormatted = `${year}-${month}-${day}`;
+                dataAgendamentoInput.value = todayFormatted;
+                gerarSlotsHorarios();
+            }
+
+            agendamentoForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const servico = servicoNomeInput.value;
+                const data = dataAgendamentoInput.value;
+                const hora = horaAgendamentoSelect.value;
+                const nomeCliente = document.getElementById('nomeCliente').value;
+                const telefoneCliente = document.getElementById('telefoneCliente').value;
+                const valorServico = servicoValorInput.value; // Pega o valor do input oculto
+
+                if (!servico || servico === 'Serviço Não Selecionado' || !data || !hora || !nomeCliente || !telefoneCliente || !valorServico) {
+                    showMessage('Por favor, preencha todos os campos: Serviço, Data, Hora, Seu Nome, Telefone e certifique-se de que o valor do serviço foi carregado.', 'error');
+                    return;
+                }
+
+                const selectedOption = horaAgendamentoSelect.options[horaAgendamentoSelect.selectedIndex];
+                if (selectedOption && selectedOption.disabled) {
+                    showMessage('O horário selecionado está indisponível ou já passou. Por favor, escolha outro.', 'error');
+                    return;
+                }
+
+                // --- Início da Lógica para Marcar Horário como Ocupado no Admin ---
+                let horariosSalvosDoAdmin = JSON.parse(localStorage.getItem(LS_HORARIOS_KEY_ADMIN)) || {};
+                let horariosDaData = horariosSalvosDoAdmin[data] || [];
+
+                const horarioParaOcupar = horariosDaData.find(h => h.time === hora && h.status !== 'occupied');
+                if (horarioParaOcupar) {
+                    horarioParaOcupar.status = 'occupied'; // Marca o horário como 'occupied' para a data específica
+                    horarioParaOcupar.bookedBy = nomeCliente; // Opcional: registrar quem agendou
+                    horariosSalvosDoAdmin[data] = horariosDaData;
+                    localStorage.setItem(LS_HORARIOS_KEY_ADMIN, JSON.stringify(horariosSalvosDoAdmin));
+                    console.log(`Horário ${hora} em ${data} marcado como 'occupied' no admin.`);
+                } else {
+                    console.warn(`Horário ${hora} já estava ocupado ou não encontrado nos horários do admin para a data ${data}.`);
+                    showMessage('Este horário não está mais disponível. Por favor, recarregue a página e tente novamente.', 'error');
+                    return;
+                }
+                // --- Fim da Lógica para Marcar Horário como Ocupado no Admin ---
+
+
+                // Salva o agendamento do cliente com o valor do serviço
+                const agendamentosExistentes = JSON.parse(localStorage.getItem(LS_AGENDAMENTOS_CLIENTES_KEY)) || [];
+                const novoAgendamento = { 
+                    servico, 
+                    data, 
+                    hora, 
+                    nomeCliente, 
+                    telefone: telefoneCliente, // Use 'telefone' para consistência com o admin.html
+                    valorServico: valorServico, // Usa a propriedade 'valorServico' para o valor
+                    status: 'pendente' // Define o status inicial como 'pendente'
+                };
+                agendamentosExistentes.push(novoAgendamento);
+                localStorage.setItem(LS_AGENDAMENTOS_CLIENTES_KEY, JSON.stringify(agendamentosExistentes));
+
+                console.log(`Agendamento Solicitado:
+                    Serviço: ${servico} (Valor: R$ ${valorServico})
+                    Data: ${data}
+                    Hora: ${hora}
+                    Cliente: ${nomeCliente}
+                    Telefone: ${telefoneCliente}`
+                );
+
+                agendamentoForm.style.display = 'none';
+                agendamentoMessage.style.display = 'none';
+                overlay.style.display = 'block';
+                paymentDialog.style.display = 'block';
+
+                sessionStorage.setItem('agendamentoNome', nomeCliente);
+                sessionStorage.setItem('agendamentoTelefone', telefoneCliente);
+                sessionStorage.setItem('agendamentoServico', servico);
+                sessionStorage.setItem('agendamentoData', data);
+                sessionStorage.setItem('agendamentoHora', hora);
+                sessionStorage.setItem('agendamentoValor', valorServico); // Salva o valor também no sessionStorage
+            });
+
+            payYesButton.addEventListener('click', () => {
+                const nomeCliente = sessionStorage.getItem('agendamentoNome');
+                const servico = sessionStorage.getItem('agendamentoServico');
+                const data = sessionStorage.getItem('agendamentoData');
+                const hora = sessionStorage.getItem('agendamentoHora');
+                const telefoneCliente = sessionStorage.getItem('agendamentoTelefone');
+                const valorServico = sessionStorage.getItem('agendamentoValor'); // Pega o valor do sessionStorage
+                
+                // Formatação do valor para a mensagem
+                const valorFormatado = parseFloat(valorServico).toFixed(2).replace('.', ',');
+
+                const mensagemWhatsApp = `Olá Silva do Corte, meu nome é ${nomeCliente}. Agendei o serviço "${servico}" (no valor de R$ ${valorFormatado}) para o dia ${formatDate(data)} às ${hora}h. Gostaria de enviar o comprovante de pagamento antecipado. Meu telefone é ${telefoneCliente}.`;
+                
+                const numeroWhatsApp = '5588912345678'; // <-- COLOQUE SEU NÚMERO AQUI!
+
+                window.open(`https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagemWhatsApp)}`, '_blank');
+                
+                showMessage('Redirecionando para o WhatsApp para pagamento...', 'success');
+                overlay.style.display = 'none';
+                paymentDialog.style.display = 'none';
+                
+                setTimeout(() => {
+                    alert('Agendamento concluído! Por favor, continue no WhatsApp para finalizar o pagamento.');
+                    window.location.href = 'agendamento.html'; 
+                }, 3000);
+            });
+
+            payNoButton.addEventListener('click', () => {
+                showMessage('Agendamento confirmado! Aguardamos você.', 'success');
+                overlay.style.display = 'none';
+                paymentDialog.style.display = 'none';
+                setTimeout(() => {
+                    alert('Agendamento concluído sem pagamento antecipado!');
+                    window.location.href = 'agendamento.html'; 
+                }, 3000);
+            });
+
+            function showMessage(msg, type) {
+                agendamentoMessage.textContent = msg;
+                agendamentoMessage.className = `message ${type}`;
+                agendamentoMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

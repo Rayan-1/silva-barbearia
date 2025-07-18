@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Produtos - Silva do Corte</title>
+  <style>
+    :root {
+      --primary: #facc15;
+      --primary-dark: #eab308;
+      --dark: #0f172a;
+      --dark-light: #1e293b;
+      --text: #ffffff;
+      --text-light: #cbd5e1;
+      --text-lighter: #94a3b8;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: var(--dark);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 1rem;
+      line-height: 1.5;
+    }
+    
+    .header-container {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .back-button {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: var(--primary);
+      color: var(--dark);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    
+    h1 {
+      color: var(--primary);
+      margin: 0.5rem 0;
+      font-size: 1.8rem;
+    }
+    
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-box {
+      width: 100%;
+      position: relative;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 0.7rem 1rem 0.7rem 2.5rem;
+      border-radius: 25px;
+      border: none;
+      background: var(--dark-light);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    
+    .search-box::before {
+      content: '🔍';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    .category-filter {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .category-filter::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    .category-btn {
+      background: var(--dark-light);
+      color: var(--text-light);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    
+    .category-btn.active {
+      background: var(--primary);
+      color: var(--dark);
+      font-weight: bold;
+    }
+    
+    .produtos-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    .produto {
+      background: var(--dark-light);
+      padding: 1.2rem;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .produto-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .produto h3 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .produto .category {
+      display: inline-block;
+      background: rgba(250, 204, 21, 0.2);
+      color: var(--primary);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .produto p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+    
+    .produto .preco {
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+    
+    .btn {
+      background: var(--primary);
+      color: var(--dark);
+      padding: 0.7rem;
+      border-radius: 25px;
+      text-decoration: none;
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+    
+    .no-products {
+      text-align: center;
+      color: var(--text-lighter);
+      padding: 2rem 1rem;
+    }
+    
+    .no-products .icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* Versão para tablets */
+    @media (min-width: 600px) {
+      .produtos-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+    
+    /* Versão para desktop */
+    @media (min-width: 900px) {
+      body {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .controls {
+        flex-direction: row;
+        align-items: center;
+      }
+      
+      .search-box {
+        max-width: 300px;
+      }
+      
+      .produtos-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-container">
+    <button onclick="window.history.back()" class="back-button">Voltar</button>
+    <h1>Nossos Produtos</h1>
+  </div>
+  
+  <div class="controls">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Pesquisar produtos...">
+    </div>
+    <div class="category-filter" id="categoryFilter">
+      <button class="category-btn active" data-category="all">Todos</button>
+      <!-- Categorias serão adicionadas aqui -->
+    </div>
+  </div>
+  
+  <div class="produtos-container" id="produtosContainer">
+    <!-- Produtos serão carregados aqui -->
+  </div>
+
+  <script>
+    // Configurações
+    const LS_PRODUTOS_KEY = 'produtosSilvaDoCorte';
+    const WHATSAPP_NUMBER = '5588993143575';
+    
+    // Carrega e exibe os produtos
+    function carregarProdutos() {
+      const produtosContainer = document.getElementById('produtosContainer');
+      const produtos = JSON.parse(localStorage.getItem(LS_PRODUTOS_KEY)) || [];
+      
+      produtosContainer.innerHTML = '';
+      
+      if (produtos.length === 0) {
+        produtosContainer.innerHTML = `
+          <div class="no-products">
+            <div class="icon">📦</div>
+            <p><strong>Nenhum produto disponível</strong></p>
+            <p>Volte em breve para conferir!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Processa categorias
+      const categorias = ['all'];
+      produtos.forEach(produto => {
+        if (produto.categoria && !categorias.includes(produto.categoria)) {
+          categorias.push(produto.categoria);
+        }
+      });
+      
+      // Atualiza filtros de categoria
+      const categoryFilter = document.getElementById('categoryFilter');
+      categoryFilter.innerHTML = categorias.map(cat => `
+        <button class="category-btn ${cat === 'all' ? 'active' : ''}" 
+                data-category="${cat}">
+          ${cat === 'all' ? 'Todos' : cat}
+        </button>
+      `).join('');
+      
+      // Adiciona eventos aos filtros
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.category-btn').forEach(b => {
+            b.classList.remove('active');
+          });
+          btn.classList.add('active');
+          filtrarProdutos();
+        });
+      });
+      
+      // Barra de pesquisa
+      document.getElementById('searchInput').addEventListener('input', filtrarProdutos);
+      
+      // Adiciona produtos
+      produtos.forEach(produto => {
+        const produtoEl = document.createElement('div');
+        produtoEl.className = 'produto';
+        produtoEl.dataset.categories = produto.categoria || '';
+        produtoEl.dataset.searchTerm = `${produto.nome.toLowerCase()} ${produto.descricao?.toLowerCase() || ''}`;
+        
+        const preco = parseFloat(produto.valor).toFixed(2).replace('.', ',');
+        const whatsappMsg = encodeURIComponent(
+          `Olá! Gostaria de comprar: ${produto.nome}\nValor: R$ ${preco}\n${produto.descricao || ''}`
+        );
+        
+        produtoEl.innerHTML = `
+          <img class="produto-image" src="${produto.fotoUrl || 'https://via.placeholder.com/400x300?text=Sem+Imagem'}" alt="${produto.nome}">
+          ${produto.categoria ? `<span class="category">${produto.categoria}</span>` : ''}
+          <h3>${produto.nome}</h3>
+          ${produto.descricao ? `<p>${produto.descricao}</p>` : ''}
+          <p class="preco">R$ ${preco}</p>
+          <a class="btn" href="https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMsg}" target="_blank">
+            Comprar pelo WhatsApp
+          </a>
+        `;
+        
+        produtosContainer.appendChild(produtoEl);
+      });
+      
+      filtrarProdutos();
+    }
+    
+    // Filtra produtos
+    function filtrarProdutos() {
+      const categoria = document.querySelector('.category-btn.active').dataset.category;
+      const termo = document.getElementById('searchInput').value.toLowerCase();
+      
+      document.querySelectorAll('.produto').forEach(produto => {
+        const catMatch = categoria === 'all' || 
+                       produto.dataset.categories.includes(categoria);
+        const searchMatch = produto.dataset.searchTerm.includes(termo);
+        
+        produto.style.display = catMatch && searchMatch ? 'flex' : 'none';
+      });
+      
+      // Verifica se há resultados
+      const visible = Array.from(document.querySelectorAll('.produto'))
+        .some(p => p.style.display !== 'none');
+      
+      if (!visible) {
+        const noResults = document.querySelector('.no-products:not(.initial)') || 
+          document.createElement('div');
+        noResults.className = 'no-products';
+        noResults.innerHTML = `
+          <div class="icon">🔍</div>
+          <p><strong>Nenhum produto encontrado</strong></p>
+          <p>Tente alterar sua busca</p>
+        `;
+        
+        if (!document.querySelector('.no-products:not(.initial)')) {
+          document.getElementById('produtosContainer').appendChild(noResults);
+        }
+      } else {
+        const noResults = document.querySelector('.no-products:not(.initial)');
+        if (noResults) noResults.remove();
+      }
+    }
+    
+    // Inicializa
+    document.addEventListener('DOMContentLoaded', carregarProdutos);
+  </script>
+</body>
+</html>

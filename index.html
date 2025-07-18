@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Silva do Corte - Barbearia Premium</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+    <style>
+        /* Estilos Gerais (Aplicados a todas as telas, servem como base) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #fff;
+            /* Ajustes para a imagem de fundo do BODY */
+            background-image: url('imgs/silva-black.jpg');
+            background-repeat: no-repeat;
+            background-position: center center; /* Centraliza a imagem */
+            background-size: cover; /* Garante que a imagem cubra toda a área */
+            background-attachment: fixed; /* Opcional: faz a imagem de fundo rolar com a página */
+            position: relative;
+            min-height: 100vh; /* Garante que o body ocupe toda a altura da viewport */
+            overflow-x: hidden; /* Evita scroll horizontal indesejado */
+        }
+
+        body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(15, 23, 42, 0.85); /* Escurece a imagem de fundo */
+        filter: grayscale(100%) brightness(0%); /* Aplica filtro de escala de cinza e remove o brilho */
+        z-index: -1;
+        }
+
+        header {
+            background-color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-area img {
+            width: 24px;
+        }
+
+        .logo-text {
+            color: #fff;
+        }
+
+        .logo-text strong {
+            font-weight: 800;
+        }
+
+        .logo-text span {
+            display: block;
+            color: #facc15;
+            font-size: 0.85rem;
+            margin-top: -2px;
+        }
+
+        nav a {
+            margin: 0 1rem;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #facc15;
+        }
+
+        /* Estilo específico para o link admin */
+        nav a.admin-link {
+            background-color: #facc15;
+            color: #000;
+            font-weight: 700;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            margin-left: 1rem;
+            display: inline-block;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: pointer; /* Adicionado para indicar que é clicável */
+        }
+
+        nav a.admin-link:hover {
+            background-color: #e0b40e;
+            color: #000;
+        }
+
+        .hero {
+            background-color: transparent;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero img {
+            width: 48px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            color: #facc15;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 1rem auto 2.5rem;
+            color: #e2e8f0;
+            font-size: 1.2rem;
+        }
+
+        .botoes {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .botoes a {
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: 0.3s;
+            position: relative;
+            z-index: 1;
+            font-size: 1.1rem;
+        }
+
+        .btn-agendar {
+            background-color: #facc15;
+            color: black;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .btn-agendar:hover {
+            background-color: #e0b40e;
+            transform: translateY(-2px);
+        }
+
+        .floating-social-buttons {
+            position: fixed;
+            right: 15px;
+            bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .floating-social-button {
+            width: 48px;
+            height: 48px;
+            background-color: #facc15;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .floating-social-button:hover {
+            background-color: #e0b40e;
+        }
+
+        .floating-social-button img {
+            width: 24px;
+            height: 24px;
+            user-select: none;
+            filter: none;
+        }
+
+        footer {
+            background-color: #000;
+            text-align: center;
+            padding: 1rem;
+            color: #facc15;
+            margin-top: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- Media Queries para Responsividade --- */
+
+        /* Para telas de até 1024px (Tablets e alguns Notebooks) */
+        @media (max-width: 1024px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+
+            nav a {
+                margin: 0 0.7rem;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem;
+                min-height: calc(100vh - 100px);
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+                max-width: 550px;
+            }
+
+            .botoes a {
+                padding: 0.9rem 1.8rem;
+                font-size: 1rem;
+            }
+        }
+
+        /* Para telas de até 768px (Tablets em modo retrato e a maioria dos celulares) */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            header {
+                flex-direction: column;
+                padding: 1rem;
+                align-items: flex-start;
+            }
+
+            .logo-area {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .logo-text {
+                text-align: center;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+                min-height: calc(100vh - 80px);
+            }
+
+            .hero img {
+                width: 38px;
+                margin-bottom: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+                margin: 0.8rem auto 1.5rem;
+                max-width: 90%;
+            }
+
+            .botoes {
+                flex-direction: column;
+                gap: 0.8rem;
+                padding: 0 1rem;
+            }
+
+            .botoes a {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+
+            .floating-social-buttons {
+                right: 10px;
+                bottom: 20px;
+                gap: 10px;
+            }
+
+            .floating-social-button {
+                width: 44px;
+                height: 44px;
+            }
+
+            .floating-social-button img {
+                width: 22px;
+                height: 22px;
+            }
+
+            footer {
+                margin-top: 2rem;
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            body {
+                background-size: cover;
+                background-position: center 30%;
+            }
+        }
+
+        /* Para telas muito pequenas (ex: iPhones 5/SE, larguras < 375px) */
+        @media (max-width: 375px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero h2 {
+                font-size: 1.4rem;
+            }
+            .hero p {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* NOVOS ESTILOS PARA A MODAL DE SENHA */
+        .modal-overlay {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center; /* Centraliza verticalmente */
+            z-index: 2000; /* Garante que fique acima de tudo */
+            opacity: 0; /* Para animação de fade */
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex; /* Exibe a modal */
+            opacity: 1; /* Torna visível com fade */
+        }
+
+        .modal-content {
+            background-color: #0f172a; /* Cor de fundo da sua barbearia */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 400px;
+            width: 90%; /* Responsivo */
+            position: relative;
+            transform: translateY(-50px); /* Começa um pouco acima para animação */
+            transition: transform 0.3s ease-out;
+            border: 1px solid #facc15; /* Borda amarela para destaque */
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0); /* Desliza para a posição final */
+        }
+
+        .modal-content h2 {
+            color: #facc15;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .modal-content p {
+            color: #e2e8f0;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .modal-content input[type="password"] {
+            width: calc(100% - 20px); /* Ajusta a largura para levar em conta o padding */
+            padding: 12px 10px;
+            margin-bottom: 20px;
+            border: 1px solid #facc15;
+            border-radius: 5px;
+            background-color: #1e293b; /* Fundo do input mais escuro */
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .modal-content input[type="password"]::placeholder {
+            color: #94a3b8;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .modal-content button#submitPasswordBtn {
+            background-color: #facc15;
+            color: #000;
+        }
+
+        .modal-content button#submitPasswordBtn:hover {
+            background-color: #e0b40e;
+            transform: translateY(-1px);
+        }
+
+        .modal-content button.cancel-button {
+            background-color: #475569; /* Cinza mais escuro para cancelar */
+            color: #fff;
+        }
+
+        .modal-content button.cancel-button:hover {
+            background-color: #64748b;
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            color: #ef4444; /* Cor vermelha para mensagens de erro */
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none; /* Escondido por padrão */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <img src="https://img.icons8.com/ios-filled/50/facc15/scissors.png" alt="Ícone" />
+            <div class="logo-text">
+                <strong>Silva do Corte</strong>
+                <span>Barbearia Premium</span>
+            </div>
+        </div>
+        <nav>
+            <a href="#">Início</a>
+            <a href="servicos.html">Serviços</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="Planos.html">Planos</a>
+            <a href="contato.html">Localização</a>
+            <a href="#" class="admin-link">Admin</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <img src="https://img.icons8.com/ios-filled/50/facc15/scissors.png" alt="Ícone central" />
+        <h1>Silva do Corte</h1>
+        <h2>Barbearia Premium</h2>
+        <p>
+            Mais de 3 anos transformando visual masculino com técnicas tradicionais e modernas.  
+            
+        </p>
+
+        <div class="botoes">
+            <a class="btn-agendar" href="servicos.html">📅 Agendar Horário</a>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2025 Silva do Corte - Todos os direitos reservados.
+    </footer>
+
+    <div class="floating-social-buttons">
+        <a href="https://wa.me/5588993143575" target="_blank" class="floating-social-button" rel="noopener noreferrer" aria-label="WhatsApp">
+            <img src="https://img.icons8.com/ios-filled/50/000000/whatsapp--v1.png" alt="WhatsApp" />
+        </a>
+        <a href="https://www.instagram.com/silvadoocortee" target="_blank" class="floating-social-button" rel="noopener noreferrer" aria-label="Instagram">
+            <img src="https://img.icons8.com/ios-filled/50/000000/instagram-new--v1.png" alt="Instagram" />
+        </a>
+    </div>
+
+    <div id="passwordModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Acesso Administrativo</h2>
+            <p>Por favor, insira a senha:</p>
+            <input type="password" id="adminPasswordInput" placeholder="Senha" />
+            <div class="modal-buttons">
+                <button id="submitPasswordBtn">Acessar</button>
+                <button id="cancelPasswordBtn" class="cancel-button">Cancelar</button>
+            </div>
+            <p id="passwordError" class="error-message"></p>
+        </div>
+    </div>
+    <script>
+        const passwordModal = document.getElementById('passwordModal');
+        const adminPasswordInput = document.getElementById('adminPasswordInput');
+        const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+        const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+        const passwordError = document.getElementById('passwordError');
+        const adminLink = document.querySelector('.admin-link'); // Seleciona o link "Admin"
+
+        // Função para mostrar a modal
+        function showPasswordModal() {
+            passwordModal.classList.add('show'); // Adiciona a classe 'show' para exibir
+            adminPasswordInput.value = ''; // Limpa o campo de senha
+            passwordError.style.display = 'none'; // Esconde a mensagem de erro
+            adminPasswordInput.focus(); // Coloca o foco no campo da senha
+        }
+
+        // Função para esconder a modal
+        function hidePasswordModal() {
+            passwordModal.classList.remove('show'); // Remove a classe 'show' para esconder
+        }
+
+        // Função para verificar a senha
+        function checkAdminPassword() {
+            const password = adminPasswordInput.value;
+            if (password === "silva2025") {
+                hidePasswordModal(); // Esconde a modal antes de redirecionar
+                window.location.href = "admin.html"; // Redireciona
+            } else {
+                passwordError.textContent = "Senha incorreta. Tente novamente.";
+                passwordError.style.display = 'block'; // Exibe a mensagem de erro
+            }
+        }
+
+        // Event Listeners
+        // Quando clicar no botão "Admin" na nav
+        adminLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Impede o comportamento padrão do link (#)
+            showPasswordModal();
+        });
+
+        // Quando clicar no botão "Acessar" na modal
+        submitPasswordBtn.addEventListener('click', checkAdminPassword);
+
+        // Quando clicar no botão "Cancelar" na modal
+        cancelPasswordBtn.addEventListener('click', hidePasswordModal);
+
+        // Permitir submeter a senha com a tecla Enter no campo de input
+        adminPasswordInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkAdminPassword();
+            }
+        });
+
+        // Esconder modal ao clicar fora dela
+        passwordModal.addEventListener('click', function(event) {
+            if (event.target === passwordModal) { // Verifica se o clique foi no overlay e não no conteúdo
+                hidePasswordModal();
+            }
+        });
+    </script>
+
+</body>
+</html>
