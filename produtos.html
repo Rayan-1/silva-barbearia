@@ -31,8 +31,9 @@
     
     .header-container {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       position: relative;
+      padding-top: 2.5rem; /* Espaço para o botão */
     }
     
     .back-button {
@@ -48,6 +49,7 @@
       text-decoration: none;
       font-size: 0.9rem;
       cursor: pointer;
+      margin-top: 0.5rem; /* Espaçamento extra */
     }
     
     h1 {
@@ -92,10 +94,11 @@
       overflow-x: auto;
       padding-bottom: 0.5rem;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Esconde a barra de rolagem no Firefox */
     }
     
     .category-filter::-webkit-scrollbar {
-      height: 4px;
+      display: none; /* Esconde a barra de rolagem no Chrome/Safari */
     }
     
     .category-btn {
@@ -118,7 +121,7 @@
     .produtos-container {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: 1.5rem; /* Aumentei o gap para melhor espaçamento */
     }
     
     .produto {
@@ -127,6 +130,7 @@
       border-radius: 10px;
       display: flex;
       flex-direction: column;
+      min-height: 380px; /* Altura mínima para consistência */
     }
     
     .produto-image {
@@ -157,6 +161,7 @@
       color: var(--text-light);
       font-size: 0.9rem;
       margin-bottom: 0.8rem;
+      flex-grow: 1; /* Faz o texto ocupar o espaço disponível */
     }
     
     .produto .preco {
@@ -175,13 +180,19 @@
       text-align: center;
       font-weight: bold;
       font-size: 0.9rem;
-      margin-top: auto;
+      margin-top: auto; /* Empurra o botão para baixo */
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
     }
     
     .no-products {
       text-align: center;
       color: var(--text-lighter);
       padding: 2rem 1rem;
+      grid-column: 1 / -1;
     }
     
     .no-products .icon {
@@ -219,6 +230,21 @@
       
       .produtos-container {
         grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .header-container {
+        padding-top: 0;
+      }
+      
+      .back-button {
+        position: static;
+        margin-right: 1rem;
+      }
+      
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   </style>
